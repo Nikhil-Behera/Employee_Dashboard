@@ -1,33 +1,51 @@
-const mongoose = require("mongoose");
-const mongoValidator = require("mongoose-unique-validator");
+const { pool } = require('../database/mysqlDb');
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, minLength: 6 },
-  joiningDate: { type: Date, required:  true },
-  position: { type: String, required: true },
-  name: { type: String, required: true },
-  aadhar: { type: String, required: true },
-  panNo: { type: String, required: true },
-  isSuperUser: { type: Boolean, required: true },
-  leaveDate: [
-    {
-      startDate: { type: String, default: "" },
-      leaveDate: { type: String, default: "" },
-      leave_status: { type: String, default: "pending" },
-      leaveDays: { type: Number, default: 0 },
-    },
-  ],
-  image: { type: String },
-  address: { type: String, required: true },
-  linkedInId: { type: String, required: true },
-  phone: { type: String, required: true },
-  githubId: { type: String, required: true },
-  dateOfBirth: { type: Date, required: true },
-});
+class User {
+  static async create({ name, email, password, role, department_id }) {
+    const [result] = await pool.query(
+      'INSERT INTO users (name, email, password, role, department_id) VALUES (?, ?, ?, ?, ?)',
+      [name, email, password, role || 'Employee', department_id || null]
+    );
+    return result.insertId;
+  }
 
-userSchema.plugin(mongoValidator);
+  static async findByEmail(email) {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+    return rows[0];
+  }
 
-const userModel = mongoose.model("User", userSchema);
+  static async findById(id) {
+    const [rows] = await pool.query(
+      \`SELECT users.*, departments.name as department_name 
+       FROM users 
+       LEFT JOIN departments ON users.department_id = departments.id 
+       WHERE users.id = ?\`, 
+      [id]
+    );
+    return rows[0];
+  }
 
-module.exports = userModel;
+  static async findAll() {
+    const [rows] = await pool.query(
+      \`SELECT users.id, users.name, users.email, users.role, users.created_at, departments.name as department_name
+       FROM users 
+       LEFT JOIN departments ON users.department_id = departments.id\`
+    );
+    return rows;
+  }
+
+  static async update(id, { name, email, role, department_id }) {
+    const [result] = await pool.query(
+      'UPDATE users SET name = ?, email = ?, role = ?, department_id = ? WHERE id = ?',
+      [name, email, role, department_id, id]
+    );
+    return result.affectedRows > 0;
+  }
+
+  static async delete(id) {
+    const [result] = await pool.query('DELETE FROM users WHERE id = ?', [id]);
+    return result.affectedRows > 0;
+  }
+}
+
+module.exports = User;

@@ -11,6 +11,7 @@ import LeaveUI from "../../UI/LeaveUI";
 import WelcomeUI from "../../UI/WelcomeUI";
 
 import { Spin } from "antd";
+import AnalyticsCharts from "../components/AnalyticsCharts";
 
 const Dashboard = () => {
   const [employee, setEmployee] = useState([]);
@@ -48,6 +49,7 @@ const Dashboard = () => {
           </div>
 
           <div className="container-fluid">
+            <AnalyticsCharts employeeData={employee} attendanceData={[]} />
             <div className="d-flex justify-content-end me-4 mb-3">
               {authUser.isSuperUser && (
                 <Link to={"/signup"}>
