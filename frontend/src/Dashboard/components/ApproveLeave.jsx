@@ -15,7 +15,7 @@ const ApproveLeave = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("https://employee-management-system-ujnj.onrender.com/api/leaves/applied-leave/");
+        const response = await axios.get("http://localhost:5000/api/leaves/applied-leave/");
         setUser(response.data.user);
         setUpdateLeave(false);
         setLoading(false);
@@ -30,7 +30,7 @@ const ApproveLeave = () => {
 
   const leaveApproval = async (permission, leaveId) => {
     try {
-      await axios.patch(`https://employee-management-system-ujnj.onrender.com/api/leaves/approve-leave/${leaveId}`, {
+      await axios.patch(`http://localhost:5000/api/leaves/approve-leave/${leaveId}`, {
         applyForLeave: permission,
       });
       setUpdateLeave(true);
@@ -48,7 +48,7 @@ const ApproveLeave = () => {
       ) : (
         user.map((emp) => {
           return (
-            <div className="d-flex justify-content-center" key={emp._id}>
+            <div className="d-flex justify-content-center" key={emp.id}>
               <CardUI
                 image={emp.image}
                 title={emp.name}
@@ -63,7 +63,7 @@ const ApproveLeave = () => {
                   {emp.leaveDate.map((leave) => {
                     if (leave.leave_status === "pending") {
                       return (
-                        <div className="d-flex flex-row" key={leave._id}>
+                        <div className="d-flex flex-row" key={leave.id}>
                           <ListGroup.Item className="w-100">
                             <span className="fw-bold">
                               From: {leave.startDate}
@@ -77,14 +77,14 @@ const ApproveLeave = () => {
                           <ListGroup.Item className="w-75">
                             <div
                               className="me-2 text-success fw-bold"
-                              onClick={() => leaveApproval(true, leave._id)}
+                              onClick={() => leaveApproval(true, leave.id)}
                             >
                               {getIcon("check")}
                               Approve
                             </div>
                             <div
                               className="text-danger fw-bold"
-                              onClick={() => leaveApproval(false, leave._id)}
+                              onClick={() => leaveApproval(false, leave.id)}
                             >
                               {getIcon("reject")}
                               Disapprove

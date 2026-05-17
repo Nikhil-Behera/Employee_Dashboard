@@ -44,14 +44,15 @@ const LoginUser = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("https://employee-management-system-ujnj.onrender.com/api/superuser/login", {
+      const response = await axios.post("http://localhost:5000/api/superuser/login", {
         email: data.email,
         password: data.password,
       });
-      const { _id, isSuperUser } = response.data.user;
+      const { id, role } = response.data.user;
+      const isSuperUser = role === "Admin";
       console.log(response.data.message);
       message.success("Login Successfull!!");
-      authUser.login(response.data.token, _id, isSuperUser);
+      authUser.login(response.data.token, id, isSuperUser);
       navigate("/");
     } catch (error) {
       console.log(error);

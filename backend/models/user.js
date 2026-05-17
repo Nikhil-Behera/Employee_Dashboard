@@ -1,10 +1,22 @@
 const { pool } = require('../database/mysqlDb');
 
 class User {
-  static async create({ name, email, password, role, department_id }) {
+  static async create({ 
+    name, email, password, role, department_id,
+    joiningDate, position, aadhar, panNo, address,
+    dateOfBirth, githubId, linkedIn, phone, image 
+  }) {
     const [result] = await pool.query(
-      'INSERT INTO users (name, email, password, role, department_id) VALUES (?, ?, ?, ?, ?)',
-      [name, email, password, role || 'Employee', department_id || null]
+      `INSERT INTO users (
+        name, email, password, role, department_id,
+        joiningDate, position, aadhar, panNo, address,
+        dateOfBirth, githubId, linkedIn, phone, image
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        name, email, password, role || 'Employee', department_id || null,
+        joiningDate || null, position || null, aadhar || null, panNo || null, address || null,
+        dateOfBirth || null, githubId || null, linkedIn || null, phone || null, image || null
+      ]
     );
     return result.insertId;
   }
@@ -16,10 +28,10 @@ class User {
 
   static async findById(id) {
     const [rows] = await pool.query(
-      \`SELECT users.*, departments.name as department_name 
+      `SELECT users.*, departments.name as department_name 
        FROM users 
        LEFT JOIN departments ON users.department_id = departments.id 
-       WHERE users.id = ?\`, 
+       WHERE users.id = ?`, 
       [id]
     );
     return rows[0];
@@ -27,17 +39,30 @@ class User {
 
   static async findAll() {
     const [rows] = await pool.query(
-      \`SELECT users.id, users.name, users.email, users.role, users.created_at, departments.name as department_name
+      `SELECT users.*, departments.name as department_name
        FROM users 
-       LEFT JOIN departments ON users.department_id = departments.id\`
+       LEFT JOIN departments ON users.department_id = departments.id`
     );
     return rows;
   }
 
-  static async update(id, { name, email, role, department_id }) {
+  static async update(id, { 
+    name, email, role, department_id,
+    joiningDate, position, aadhar, panNo, address,
+    dateOfBirth, githubId, linkedIn, phone, image 
+  }) {
     const [result] = await pool.query(
-      'UPDATE users SET name = ?, email = ?, role = ?, department_id = ? WHERE id = ?',
-      [name, email, role, department_id, id]
+      `UPDATE users SET 
+        name = ?, email = ?, role = ?, department_id = ?,
+        joiningDate = ?, position = ?, aadhar = ?, panNo = ?, address = ?,
+        dateOfBirth = ?, githubId = ?, linkedIn = ?, phone = ?, image = ?
+       WHERE id = ?`,
+      [
+        name, email, role, department_id || null,
+        joiningDate || null, position || null, aadhar || null, panNo || null, address || null,
+        dateOfBirth || null, githubId || null, linkedIn || null, phone || null, image || null,
+        id
+      ]
     );
     return result.affectedRows > 0;
   }

@@ -27,7 +27,7 @@ const Profile = () => {
   useEffect(() => {
     const getSelectedUserData = async () => {
       try {
-        const response = await axios.get(`https://employee-management-system-ujnj.onrender.com/api/users/${uid}`);
+        const response = await axios.get(`http://localhost:5000/api/users/${uid}`);
         setSelectedUser(response.data.user);
       } catch (error) {
         console.log(error);
@@ -46,7 +46,7 @@ const Profile = () => {
                 className="custom-button"
                 onClick={changeMode}
                 variant=""
-                disabled={!auth.isSuperUser && auth.userId !== selectedUser._id}
+                disabled={!auth.isSuperUser && auth.userId !== selectedUser.id}
               >
                 {getIcon("edit")} Edit Info
               </Button>

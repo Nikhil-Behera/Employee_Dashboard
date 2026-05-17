@@ -46,6 +46,16 @@ const initializeDB = async () => {
         password VARCHAR(255) NOT NULL,
         role ENUM('Admin', 'Employee') DEFAULT 'Employee',
         department_id INT,
+        joiningDate DATE,
+        position VARCHAR(100),
+        aadhar VARCHAR(20),
+        panNo VARCHAR(20),
+        address TEXT,
+        dateOfBirth DATE,
+        githubId VARCHAR(100),
+        linkedIn VARCHAR(100),
+        phone VARCHAR(20),
+        image VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
       )

@@ -28,7 +28,7 @@ const ProfileDetails = (props) => {
         <ListGroupItem value={props.user.name} title="Full Name" />
         <ListGroupItem value={props.user.position} title="Position" />
         <ListGroupItem
-          value={props.user.dateOfBirth.split("T")[0]}
+          value={props.user.dateOfBirth ? props.user.dateOfBirth.split("T")[0] : "N/A"}
           title="Date Of Birth"
         />
         <ListGroupItem value={props.user.address} title="Address" />

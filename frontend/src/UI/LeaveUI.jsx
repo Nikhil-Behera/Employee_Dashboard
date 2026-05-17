@@ -23,11 +23,11 @@ const LeaveUI = ({ employee, superuser }) => {
           if (getLeaveData(emp.leaveDate) > 0) {
             return (
               <div
-                key={emp._id}
+                key={emp.id}
                 className="d-flex justify-content-between mt-2"
               >
                 <div className="d-flex gap-4">
-                  <Avatar src={`https://employee-management-system-ujnj.onrender.com/${emp.image}`} size={30} />
+                  <Avatar src={`http://localhost:5000/${emp.image}`} size={30} />
                   <span className="leave-text">{emp.name}</span>
                 </div>
                 <span className="leave-text">
@@ -48,7 +48,7 @@ const LeaveUI = ({ employee, superuser }) => {
       {leaveUsers.map((user, index) => {
         return (
           <div key={index} className="d-flex justify-content-between mt-3">
-            <Avatar src={`https://employee-management-system-ujnj.onrender.com/${user.image}`} size={25} />
+            <Avatar src={`http://localhost:5000/${user.image}`} size={25} />
             <div>{user.name}</div>
             <div>{user.startDate}</div>
             <div>{getIcon("right-arrow")}</div>

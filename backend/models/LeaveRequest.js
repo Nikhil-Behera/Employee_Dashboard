@@ -3,8 +3,8 @@ const { pool } = require('../database/mysqlDb');
 class LeaveRequest {
   static async create({ user_id, start_date, end_date, reason }) {
     const [result] = await pool.query(
-      \`INSERT INTO leave_requests (user_id, start_date, end_date, reason, status) 
-       VALUES (?, ?, ?, ?, 'Pending')\`,
+    `INSERT INTO leave_requests (user_id, start_date, end_date, reason, status) 
+       VALUES (?, ?, ?, ?, 'Pending')`,
       [user_id, start_date, end_date, reason]
     );
     return result.insertId;
@@ -20,10 +20,10 @@ class LeaveRequest {
 
   static async findAll() {
     const [rows] = await pool.query(
-      \`SELECT leave_requests.*, users.name as user_name 
+      `SELECT leave_requests.*, users.name as user_name 
        FROM leave_requests 
        JOIN users ON leave_requests.user_id = users.id 
-       ORDER BY created_at DESC\`
+       ORDER BY created_at DESC`
     );
     return rows;
   }

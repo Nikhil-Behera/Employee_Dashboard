@@ -128,7 +128,7 @@ const AllLeaves = () => {
             {sortedLeaves.length !== 0 ? (
               sortedLeaves.map((leave, index) => {
                 return (
-                  <tr key={leave._id}>
+                  <tr key={leave.id}>
                     <td>{index + 1}</td>
                     <td>{leave.startDate}</td>
                     <td>{leave.leaveDate}</td>

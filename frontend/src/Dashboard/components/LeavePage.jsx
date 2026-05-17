@@ -33,7 +33,7 @@ const LeavePage = () => {
     const leaveapplication = async () => {
       if (totalDays) {
         try {
-          await axios.patch(`https://employee-management-system-ujnj.onrender.com/api/leaves/applyForleave/${authUser.userId}`, {
+          await axios.patch(`http://localhost:5000/api/leaves/applyForleave/${authUser.userId}`, {
             leaveDate: {
               leaveDays: totalDays,
               leaveStartDate: rangePicker.rangepicker[0],
@@ -87,11 +87,11 @@ const LeavePage = () => {
           <RangePicker disabledDate={disabledDate} size="large" />
         </Form.Item>
         <Form.Item className="d-flex justify-content-center">
-          <Button type="primary" htmltype="submit">
+          <Button variant="success" type="submit">
             Submit
           </Button>
           <Link to={"/leave-page"}>
-            <Button variant="secondary" className="ms-3">
+            <Button variant="danger" className="ms-3">
               Cancel
             </Button>
           </Link>

@@ -8,15 +8,15 @@ const EmpList = (props) => {
       {props.employee.map((emp) => {
         return (
           <Link
-            to={`/profile/${emp._id}`}
+            to={`/profile/${emp.id}`}
             className="text-decoration-none w-auto"
-            key={emp._id}
+            key={emp.id}
           >
             <CardUI
               width="18rem"
               title={emp.name}
               image={emp.image}
-              key={emp._id}
+              key={emp.id}
               position={emp.position}
               center={true}
               imgSize={50}

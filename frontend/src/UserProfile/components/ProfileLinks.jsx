@@ -41,7 +41,7 @@ const ProfileLinks = (props) => {
               icon="githubId"
             />
             <ListGroupItem
-              name={props.user.joiningDate.split("T")[0]}
+              name={props.user.joiningDate ? props.user.joiningDate.split("T")[0] : "N/A"}
               title="Joining Date"
               icon="joiningDate"
             />

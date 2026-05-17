@@ -61,7 +61,7 @@ const EditEmployee = (data) => {
     }
 
     try {
-      await axios.patch(`https://employee-management-system-ujnj.onrender.com/api/users/editEmployee/${user._id}`, formData, {
+      await axios.patch(`http://localhost:5000/api/users/editEmployee/${user.id}`, formData, {
         headers: {
           Authorization: "Bearer " + auth.token,
         },
@@ -69,7 +69,7 @@ const EditEmployee = (data) => {
       setLoading(true);
       message.success("Profile Updated successfully");
       data.changeMode();
-      navigate(`/profile/${data.user._id}`);
+      navigate(`/profile/${data.user.id}`);
     } catch (error) {
       message.error("Could not update data..Please try again!");
     }
@@ -223,12 +223,12 @@ const EditEmployee = (data) => {
             <Button
               type="primary"
               htmlType="submit"
-              variant="success"
+              style={{ backgroundColor: '#198754', borderColor: '#198754' }}
               className="me-3"
             >
               <MdOutlineSaveAlt className="mb-1 me-2" /> Save
             </Button>
-            <Button variant="danger" onClick={data.changeMode}>
+            <Button danger onClick={data.changeMode}>
               <RxCross1 className="mb-1 me-2" /> Cancel
             </Button>
           </Form.Item>

@@ -1,0 +1,59 @@
+EMPLOYEE MANAGEMENT SYSTEM (EMS) - PROJECT DOCUMENTATION
+======================================================
+
+1. PROJECT OVERVIEW
+-------------------
+The Employee Management System is a professional full-stack web application designed to centralize and automate human resource tasks such as maintaining employee records, tracking attendance, and managing leave requests.
+
+
+2. TECHNOLOGY STACK
+-------------------
+
+FRONTEND (User Interface):
+- React.js: Framework for building the interactive UI.
+- Ant Design: High-quality components (tables, modals, forms).
+- React Bootstrap: Responsive layout and mobile compatibility.
+- Axios: API communication.
+- Nivo / Chart.js: Data visualization (Pie charts, graphs).
+
+BACKEND (Server & API):
+- Node.js & Express: Server environment and API framework.
+- JWT (JSON Web Tokens): Secure session management.
+- Bcrypt.js: Password encryption.
+- Multer: Image upload management.
+
+DATABASE:
+- MySQL: Relational database for structured data storage.
+- MySQL2: Connector for Node.js.
+
+
+3. KEY FEATURES
+---------------
+
+AUTHENTICATION:
+Role-based system. Admin has full control; Employee has personal dashboard access.
+
+DASHBOARD:
+Real-time stats showing headcount, daily leave status, and designation breakdown.
+
+LEAVE MANAGEMENT:
+Employees apply for leave. Admins review, approve, or reject requests from a central list.
+
+EMPLOYEE DIRECTORY:
+Searchable list of staff members. Admin can create, update, or delete users.
+
+
+4. PROJECT WORKFLOW (HOW IT WORKS)
+----------------------------------
+
+1. LOGIN: User enters details. Backend checks MySQL and returns a secure token.
+2. SESSION: Frontend saves token and identifies user role (Admin/Employee).
+3. REQUESTS: User actions (like applying for leave) send the token to the Backend for validation.
+4. DATA: Backend updates MySQL and sends the result back to the UI.
+
+
+5. HOW TO RUN THE PROJECT
+-------------------------
+1. DATABASE: Ensure MySQL is running and a .env file exists with your password.
+2. ADMIN: Run "node create-admin.js" in the backend folder to create the first login.
+3. START: Run "npm run ems" in the backend folder to launch the project.

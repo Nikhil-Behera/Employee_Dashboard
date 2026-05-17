@@ -56,11 +56,16 @@ function App() {
 
   const getUserData = async () => {
     if (token) {
+      if (!userId || userId === 'undefined') {
+        logout();
+        return;
+      }
       try {
-        const response = await axios.get(`https://employee-management-system-ujnj.onrender.com/api/users/${userId}`);
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
         setCurrentUser(response.data.user);
       } catch (error) {
         console.log(error);
+        logout();
       }
     }
   };

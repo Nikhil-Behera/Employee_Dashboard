@@ -12,6 +12,15 @@ const getUserById = async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ message: "User not found", success: false });
     }
+    const LeaveRequest = require("../models/LeaveRequest");
+    const leaves = await LeaveRequest.findByUserId(uid);
+    user.leaveDate = leaves.map(l => ({
+       id: l.id,
+       startDate: l.start_date,
+       leaveDate: l.end_date,
+       leave_status: l.status.toLowerCase(),
+       reason: l.reason
+    }));
     return res.status(200).send({ message: "User Found!", success: true, user });
   } catch (error) {
     return res.status(500).send({ message: error.message, success: false });
@@ -23,7 +32,13 @@ const newUser = async (req, res, next) => {
   if (!error.isEmpty()) {
     return next(new Error("Invalid Data"));
   }
-  const { name, email, password, role, department_id } = req.body;
+  const { 
+    name, email, password, isSuperUser, department_id,
+    joiningDate, position, aadhar, panNo, address,
+    dateOfBirth, githubId, linkedIn, phone 
+  } = req.body;
+
+  const role = isSuperUser ? 'Admin' : 'Employee';
 
   try {
     const existingUser = await User.findByEmail(email);
@@ -38,7 +53,16 @@ const newUser = async (req, res, next) => {
       email,
       password: hashedPassword,
       role,
-      department_id
+      department_id,
+      joiningDate,
+      position,
+      aadhar,
+      panNo,
+      address,
+      dateOfBirth,
+      githubId,
+      linkedIn,
+      phone
     });
 
     res.status(201).send({ message: "Register Success", success: true });
@@ -89,18 +113,61 @@ const loginUser = async (req, res, next) => {
 const displayUser = async (req, res, next) => {
   try {
     const users = await User.findAll();
-    return res.status(200).send({ user: users, success: true });
+    const LeaveRequest = require("../models/LeaveRequest");
+    const leaves = await LeaveRequest.findAll();
+
+    const mappedUsers = users.map(u => {
+       const userLeaves = leaves
+         .filter(l => l.user_id === u.id)
+         .map(l => ({
+           id: l.id,
+           startDate: l.start_date,
+           leaveDate: l.end_date,
+           leave_status: l.status.toLowerCase(),
+           reason: l.reason
+         }));
+       return { ...u, leaveDate: userLeaves };
+    });
+
+    return res.status(200).send({ user: mappedUsers, success: true });
   } catch (error) {
     return res.status(500).send({ message: "Error fetching users", success: false });
   }
 };
 
 const editEmployee = async (req, res, next) => {
-  const { name, email, role, department_id } = req.body;
+  const { name, email, role, department_id, position, phone, address, aadhar, panNo } = req.body;
   const uid = req.params.uid;
 
+  let imagePath = null;
+  if (req.file) {
+    imagePath = req.file.path.replace(/\\/g, '/');
+  }
+
   try {
-    const success = await User.update(uid, { name, email, role, department_id });
+    const existingUser = await User.findById(uid);
+    if (!existingUser) {
+      return res.status(404).json({ message: "Could not find the user", success: false });
+    }
+
+    const updatedData = {
+      name: name || existingUser.name,
+      email: email || existingUser.email,
+      role: role || existingUser.role,
+      department_id: department_id !== undefined ? department_id : existingUser.department_id,
+      joiningDate: existingUser.joiningDate,
+      position: position || existingUser.position,
+      aadhar: aadhar || existingUser.aadhar,
+      panNo: panNo || existingUser.panNo,
+      address: address || existingUser.address,
+      dateOfBirth: existingUser.dateOfBirth,
+      githubId: existingUser.githubId,
+      linkedIn: existingUser.linkedIn,
+      phone: phone || existingUser.phone,
+      image: imagePath || existingUser.image
+    };
+
+    const success = await User.update(uid, updatedData);
     if (!success) {
       return res.status(404).json({ message: "Could not find the user", success: false });
     }
